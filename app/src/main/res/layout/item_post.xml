@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/post1"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" >
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="12dp"
+            android:layout_toEndOf="@+id/ivProfilePic"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="username" />
+
+        <ImageView
+            android:id="@+id/ivProfilePic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ivPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/post1"
+        android:layout_marginTop="10dp" />
+
+    <RelativeLayout
+        android:id="@+id/rel_bottombar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivPost"
+        android:layout_marginBottom="25dp"
+        android:paddingBottom="0dp">
+
+        <TextView
+            android:id="@+id/tvBottomUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="3dp"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="username" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="15dp"
+            android:layout_toEndOf="@+id/tvBottomUsername"
+            android:maxLines="5"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            tools:text="description" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
