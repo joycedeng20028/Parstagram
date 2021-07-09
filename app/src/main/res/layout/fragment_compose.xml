@@ -4,21 +4,28 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     tools:context=".fragments.ComposeFragment">
 
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="100dp"
         android:ems="10"
         android:hint="Description"
         android:inputType="textPersonName"
+        android:lines="3"
+        android:minLines="3"
+        android:padding="10dp"
         tools:text="Description" />
 
     <Button
         android:id="@+id/btnCaptureImage"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:gravity="clip_horizontal|center"
         android:text="take a photo" />
 
     <ImageView
@@ -29,14 +36,8 @@
 
     <Button
         android:id="@+id/btnPostImage"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="post photo" />
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="logout" />
 
 </LinearLayout>

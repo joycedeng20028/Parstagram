@@ -49,7 +49,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class ComposeFragment extends Fragment {
 
-    Button btnLogout;
     EditText etDescription;
     Button btnCaptureImage;
     Button btnPostImage;
@@ -77,13 +76,6 @@ public class ComposeFragment extends Fragment {
         btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
         btnPostImage = view.findViewById(R.id.btnPostImage);
         ivPostImage = view.findViewById(R.id.ivPostImage);
-        btnLogout = view.findViewById(R.id.btnLogout);
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logoutUser();
-            }
-        });
 
         btnPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,19 +97,6 @@ public class ComposeFragment extends Fragment {
             }
         });
     }
-
-    private void logoutUser(){
-        ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        goLoginActivity();
-    }
-
-    public void goLoginActivity() {
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        startActivity(intent);
-        //finish();
-    }
-
 
     private void savePost(String description, ParseUser currentUser, File photoFile) {
         Post post = new Post();
