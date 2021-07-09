@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import com.example.parstagram.LoginActivity;
 import com.example.parstagram.ProfileAdapter;
 import com.example.parstagram.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -35,6 +36,9 @@ public class ProfileFragment extends Fragment {
 
     TextView tvUsername2;
     ImageView ivProfilePic2;
+    Button btnLogout;
+
+    private BottomNavigationView bottomNavigationView;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -51,6 +55,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         tvUsername2 = view.findViewById(R.id.tvUsername2);
         ivProfilePic2 = view.findViewById(R.id.ivProfilePic2);
+        btnLogout = view.findViewById(R.id.btnLogout);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
 
@@ -59,5 +64,25 @@ public class ProfileFragment extends Fragment {
         if (currentUser.getParseFile("profilePic") != null) {
             Glide.with(this).load(currentUser.getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic2);
         }
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logoutUser();
+            }
+        });
+    }
+
+    private void logoutUser(){
+        ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        goLoginActivity();
+    }
+
+    public void goLoginActivity() {
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
+        //finish();
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
     }
     }
