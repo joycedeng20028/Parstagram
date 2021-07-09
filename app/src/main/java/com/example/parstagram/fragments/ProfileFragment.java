@@ -19,17 +19,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.parstagram.LoginActivity;
 import com.example.parstagram.ProfileAdapter;
 import com.example.parstagram.R;
+import com.example.parstagram.databinding.FragmentProfileBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
@@ -37,6 +42,12 @@ public class ProfileFragment extends Fragment {
     TextView tvUsername2;
     ImageView ivProfilePic2;
     Button btnLogout;
+    RecyclerView rvProfilePosts;
+
+    ParseUser currentUser = ParseUser.getCurrentUser();
+    List<Post> gridPosts;
+    ProfileAdapter adapter;
+    FragmentProfileBinding binding;
 
     private BottomNavigationView bottomNavigationView;
 
@@ -45,19 +56,26 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        binding = FragmentProfileBinding.inflate(getLayoutInflater(), container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        tvUsername2 = view.findViewById(R.id.tvUsername2);
-        ivProfilePic2 = view.findViewById(R.id.ivProfilePic2);
-        btnLogout = view.findViewById(R.id.btnLogout);
-
-        ParseUser currentUser = ParseUser.getCurrentUser();
+        tvUsername2 = binding.tvUsername2;
+        ivProfilePic2 = binding.ivProfilePic2;
+        btnLogout = binding.btnLogout;
+        rvProfilePosts = binding.rvProfileGrid;
+        gridPosts = new ArrayList<>();
+        adapter = new ProfileAdapter(getContext(), gridPosts);
 
         tvUsername2.setText(currentUser.getUsername());
 
@@ -65,10 +83,34 @@ public class ProfileFragment extends Fragment {
             Glide.with(this).load(currentUser.getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic2);
         }
 
+        rvProfilePosts.setAdapter(adapter);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
+        rvProfilePosts.setLayoutManager(gridLayoutManager);
+
+        queryPosts();
+
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logoutUser();
+            }
+        });
+    }
+
+    protected void queryPosts() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setLimit(20);
+        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    return;
+                }
+                gridPosts.addAll(posts);
+                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -82,7 +124,6 @@ public class ProfileFragment extends Fragment {
     public void goLoginActivity() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         startActivity(intent);
-        //finish();
-        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        getActivity().finish();
     }
     }

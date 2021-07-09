@@ -1,7 +1,7 @@
 package com.example.parstagram;
 
 import android.content.Context;
-import android.text.Layout;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,8 @@ import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 
-import org.w3c.dom.Text;
+import org.jetbrains.annotations.NotNull;
+import org.parceler.Parcels;
 
 import java.util.Date;
 import java.util.List;
@@ -36,7 +37,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         this.posts = posts;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView tvUsername;
         private ImageView ivProfilePic;
@@ -45,14 +46,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvDescription;
         private TextView tvDate;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            tvUsername = itemView.findViewById(R.id.tvUsername);
-            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            ivPost = itemView.findViewById(R.id.ivPost);
-            tvBottomUsername = itemView.findViewById(R.id.tvBottomUsername);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvDate = itemView.findViewById(R.id.tvDate);
+            tvUsername = itemView.findViewById(R.id.tvDetailUsername);
+            ivProfilePic = itemView.findViewById(R.id.ivDetailProfilePic);
+            ivPost = itemView.findViewById(R.id.ivDetailPost);
+            tvBottomUsername = itemView.findViewById(R.id.tvDetailBottomUsername);
+            tvDescription = itemView.findViewById(R.id.tvDetailDescription);
+            tvDate = itemView.findViewById(R.id.tvDetailDate);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Post post) {
@@ -68,6 +70,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (post.getUser().getParseFile("profilePic") != null) {
                 Glide.with(context).load(post.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+
+            Intent intent = new Intent(context, PostDetailActivity.class);
+            Post post = posts.get(position);
+            intent.putExtra("post", Parcels.wrap(post));
+            context.startActivity(intent);
         }
     }
 
@@ -88,6 +100,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public int getItemCount() {
         return posts.size();
     }
+
 
     public String getRelativeTimeAgo(Date rawJsonDate) {
         String format = "yyyy-MM-dd'T'HH:mm:ss'Z'";

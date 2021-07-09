@@ -77,7 +77,6 @@ public class PostsFragment extends Fragment {
         };
         rvPosts.addOnScrollListener(scrollListener);
 
-
         queryPosts();
     }
 
